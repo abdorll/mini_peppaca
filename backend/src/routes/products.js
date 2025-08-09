@@ -3,21 +3,19 @@ import { Product } from '../models/Product.js';
 
 const router = express.Router();
 
-// GET /api/products - Get all products with optional filtering
 router.get('/', async (req, res) => {
   try {
-    const { search, sellerId, minPrice, maxPrice, limit, offset } = req.query;
-    
-    const filters = {};
-    if (search) filters.search = search;
-    if (sellerId) filters.sellerId = sellerId;
-    if (minPrice) filters.minPrice = parseFloat(minPrice);
-    if (maxPrice) filters.maxPrice = parseFloat(maxPrice);
-    if (limit) filters.limit = parseInt(limit);
-    if (offset) filters.offset = parseInt(offset);
+    const filters = {
+      search: req.query.search,
+      sellerId: req.query.sellerId,
+      minPrice: req.query.minPrice ? parseFloat(req.query.minPrice) : undefined,
+      maxPrice: req.query.maxPrice ? parseFloat(req.query.maxPrice) : undefined,
+      limit: req.query.limit ? parseInt(req.query.limit) : undefined,
+      offset: req.query.offset ? parseInt(req.query.offset) : undefined
+    };
 
     const products = await Product.findAll(filters);
-    
+
     res.json({
       success: true,
       data: products,
@@ -33,19 +31,18 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/products/:id - Get product by ID
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
-    
+
     if (!product) {
       return res.status(404).json({
         success: false,
         error: 'Product not found'
       });
     }
-    
+
     res.json({
       success: true,
       data: product
@@ -60,12 +57,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/products - Create new product
 router.post('/', async (req, res) => {
   try {
     const productData = req.body;
+
+    if (!productData.title || !productData.description || !productData.price || !productData.sellerId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields'
+      });
+    }
+
     const product = await Product.create(productData);
-    
+
     res.status(201).json({
       success: true,
       data: product,
@@ -81,14 +85,13 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT /api/products/:id - Update product
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const productData = req.body;
-    
+
     const product = await Product.update(id, productData);
-    
+
     res.json({
       success: true,
       data: product,
@@ -104,12 +107,12 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/products/:id - Delete product
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+
     await Product.delete(id);
-    
+
     res.json({
       success: true,
       message: 'Product deleted successfully'

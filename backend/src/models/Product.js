@@ -10,12 +10,10 @@ export class Product {
           seller:sellers(*)
         `);
 
-      // Apply search filter if provided
       if (filters.search) {
         query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
       }
 
-      // Apply pagination
       if (filters.limit) {
         query = query.limit(filters.limit);
       }

@@ -3,11 +3,9 @@ import { Favorite } from '../models/Favorite.js';
 
 const router = express.Router();
 
-// GET /api/favorites/:userId - Get all favorites for a user
-router.get('/:userId', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { userId } = req.params;
-    const favorites = await Favorite.findByUserId(userId);
+    const favorites = await Favorite.findByUserId();
 
     res.json({
       success: true,
@@ -24,20 +22,19 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
-// POST /api/favorites - Add product to favorites
 router.post('/', async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const { productId } = req.body;
 
-    if (!userId || !productId) {
+    if (!productId) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: userId and productId'
+        error: 'Missing required fields productId'
       });
     }
 
-    const favorite = await Favorite.create(userId, productId);
-    
+    const favorite = await Favorite.create(productId);
+
     res.status(201).json({
       success: true,
       data: favorite,
@@ -45,14 +42,14 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Error adding to favorites:', error);
-    
+
     if (error.message.includes('already in favorites')) {
       return res.status(409).json({
         success: false,
         error: 'Product is already in favorites'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       error: 'Failed to add to favorites',
@@ -61,13 +58,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-// DELETE /api/favorites/:userId/:productId - Remove product from favorites
-router.delete('/:userId/:productId', async (req, res) => {
+router.delete('/:productId', async (req, res) => {
   try {
-    const { userId, productId } = req.params;
-    
-    await Favorite.delete(userId, productId);
-    
+    const { productId } = req.params;
+
+    await Favorite.delete(productId);
+
     res.json({
       success: true,
       message: 'Product removed from favorites successfully'
@@ -82,12 +78,11 @@ router.delete('/:userId/:productId', async (req, res) => {
   }
 });
 
-// GET /api/favorites/:userId/:productId/check - Check if product is favorited
-router.get('/:userId/:productId/check', async (req, res) => {
+router.get('/:productId/check', async (req, res) => {
   try {
-    const { userId, productId } = req.params;
-    const isFavorite = await Favorite.isFavorite(userId, productId);
-    
+    const { productId } = req.params;
+    const isFavorite = await Favorite.isFavorite(productId);
+
     res.json({
       success: true,
       data: { isFavorite }

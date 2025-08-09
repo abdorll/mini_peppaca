@@ -4,29 +4,30 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase configuration. Please check your .env file.');
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables');
 }
 
-// Create Supabase client with service role key for backend operations
-export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Test database connection
 export const testConnection = async () => {
   try {
-    const { data, error } = await supabase.from('sellers').select('count').limit(1);
-    if (error) throw error;
+    const { data, error } = await supabase
+      .from('products')
+      .select('count')
+      .limit(1);
+
+    if (error) {
+      console.error('Database connection test failed:', error);
+      return false;
+    }
+
     console.log('✅ Database connection successful');
     return true;
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error('Database connection test failed:', error);
     return false;
   }
 };

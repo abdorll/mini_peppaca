@@ -3,26 +3,30 @@ export interface Seller {
   name: string;
   email: string;
   address: string;
-  created_at: string; // ISO date string
-  updated_at: string; // ISO date string
-  profile_picture: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  profilePicture: string;
 }
 
 export interface Product {
   id: string;
   title: string;
   description: string;
-  full_description: string;
+  fullDescription: string;
   price: number;
   image: string;
-  seller_id: string;
-  created_at: string; // ISO date string
-  updated_at: string; // ISO date string
+  sellerId: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
   seller: Seller;
 }
+
 export interface FavoritesContextType {
   favorites: string[];
-  addToFavorites: (productId: string) => void;
-  removeFromFavorites: (productId: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  addToFavorites: (productId: string) => Promise<void>;
+  removeFromFavorites: (productId: string) => Promise<void>;
   isFavorite: (productId: string) => boolean;
+  refreshFavorites: () => Promise<void>;
 }

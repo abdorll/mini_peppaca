@@ -5,7 +5,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
-    profilePicture: String!
+    profilePicture: String
     address: String!
     createdAt: String!
     updatedAt: String!
@@ -15,7 +15,7 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     description: String!
-    fullDescription: String!
+    fullDescription: String
     price: Float!
     image: String!
     sellerId: ID!
@@ -44,7 +44,7 @@ export const typeDefs = gql`
   input ProductInput {
     title: String!
     description: String!
-    fullDescription: String!
+    fullDescription: String
     price: Float!
     image: String!
     sellerId: ID!
@@ -53,7 +53,7 @@ export const typeDefs = gql`
   input SellerInput {
     name: String!
     email: String!
-    profilePicture: String!
+    profilePicture: String
     address: String!
   }
 
@@ -67,8 +67,8 @@ export const typeDefs = gql`
     seller(id: ID!): Seller
     
     # Favorite queries
-    favorites(userId: String!): [Favorite!]!
-    isFavorite(userId: String!, productId: ID!): Boolean!
+    favorites: [Favorite!]!
+    isFavorite(productId: ID!): Boolean!
   }
 
   type Mutation {
@@ -82,8 +82,8 @@ export const typeDefs = gql`
     updateSeller(id: ID!, input: SellerInput!): Seller!
     deleteSeller(id: ID!): Boolean!
     
-    # Favorite mutations (handled via REST API, but included for completeness)
-    addToFavorites(userId: String!, productId: ID!): Favorite!
-    removeFromFavorites(userId: String!, productId: ID!): Boolean!
+    # Favorite mutations
+    addToFavorites(productId: ID!): Favorite!
+    removeFromFavorites(productId: ID!): Boolean!
   }
 `;

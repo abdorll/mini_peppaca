@@ -6,19 +6,15 @@ import { typeDefs } from './graphql/typeDefs.js';
 import { resolvers } from './graphql/resolvers.js';
 import { testConnection } from './config/database.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
-
-// Import routes
 import productsRouter from './routes/products.js';
 import sellersRouter from './routes/sellers.js';
 import favoritesRouter from './routes/favorites.js';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? ['https://your-frontend-domain.com']
@@ -29,7 +25,6 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -39,59 +34,86 @@ app.get('/health', (req, res) => {
   });
 });
 
-// REST API Routes
+app.get('/test-graphql', (req, res) => {
+  res.json({
+    success: true,
+    message: 'GraphQL endpoint should be available at /graphql',
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use('/api/products', productsRouter);
 app.use('/api/sellers', sellersRouter);
 app.use('/api/favorites', favoritesRouter);
 
-// Create Apollo Server for GraphQL
 const createApolloServer = async () => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: ({ req }) => {
-      // Add any context data here (user info, etc.)
-      return {
-        req,
-        // user: req.user, // if you add authentication later
-      };
-    },
-    introspection: process.env.NODE_ENV !== 'production',
-    playground: process.env.NODE_ENV !== 'production'
-  });
+  try {
+    console.log('🔄 Creating Apollo Server...');
 
-  await server.start();
-  server.applyMiddleware({ app, path: '/graphql' });
-  
-  return server;
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: ({ req }) => {
+        return {
+          req,
+        };
+      },
+      introspection: process.env.NODE_ENV !== 'production',
+      playground: process.env.NODE_ENV !== 'production',
+      formatError: (error) => {
+        console.error('GraphQL Error:', error);
+        return {
+          message: error.message,
+          path: error.path,
+        };
+      },
+    });
+
+    console.log('🔄 Starting Apollo Server...');
+    await server.start();
+
+    console.log('🔄 Applying Apollo middleware...');
+    server.applyMiddleware({
+      app,
+      path: '/graphql',
+      cors: {
+        origin: process.env.NODE_ENV === 'production'
+          ? ['https://your-frontend-domain.com']
+          : ['http://localhost:3000', 'http://localhost:5173'],
+        credentials: true
+      }
+    });
+
+    console.log('✅ Apollo Server created and middleware applied successfully');
+    return server;
+  } catch (error) {
+    console.error('❌ Error creating Apollo Server:', error);
+    throw error;
+  }
 };
 
-// Error handling middleware
-app.use(notFound);
-app.use(errorHandler);
-
-// Start server
 const startServer = async () => {
   try {
-    // Test database connection
     console.log('🔍 Testing database connection...');
     const dbConnected = await testConnection();
-    
+
     if (!dbConnected) {
       console.error('❌ Failed to connect to database. Please check your Supabase configuration.');
       process.exit(1);
     }
 
-    // Create Apollo Server
     console.log('🚀 Setting up GraphQL server...');
     const apolloServer = await createApolloServer();
 
-    // Start Express server
+    app.use(notFound);
+    app.use(errorHandler);
+
     app.listen(PORT, () => {
       console.log('\n🎉 Mini Peppaca Backend Server Started!');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`🌐 Server running on: http://localhost:${PORT}`);
-      console.log(`📊 GraphQL Playground: http://localhost:${PORT}${apolloServer.graphqlPath}`);
+      console.log(`📊 GraphQL Endpoint: http://localhost:${PORT}${apolloServer.graphqlPath}`);
+      console.log(`🎮 GraphQL Playground: http://localhost:${PORT}${apolloServer.graphqlPath}`);
       console.log(`🔗 Health Check: http://localhost:${PORT}/health`);
       console.log('\n📋 Available REST Endpoints:');
       console.log(`   GET    /api/products`);
@@ -104,10 +126,13 @@ const startServer = async () => {
       console.log(`   POST   /api/sellers`);
       console.log(`   PUT    /api/sellers/:id`);
       console.log(`   DELETE /api/sellers/:id`);
-      console.log(`   GET    /api/favorites/:userId`);
+      console.log(`   GET    /api/favorites/`);
       console.log(`   POST   /api/favorites`);
-      console.log(`   DELETE /api/favorites/:userId/:productId`);
-      console.log(`   GET    /api/favorites/:userId/:productId/check`);
+      console.log(`   DELETE /api/favorites/:productId`);
+      console.log(`   GET    /api/favorites/:productId/check`);
+      console.log('\n📋 Available GraphQL Endpoints:');
+      console.log(`   POST   /graphql`);
+      console.log(`   GET    /graphql (Playground)`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     });
 
@@ -117,7 +142,6 @@ const startServer = async () => {
   }
 };
 
-// Handle graceful shutdown
 process.on('SIGTERM', () => {
   console.log('👋 SIGTERM received. Shutting down gracefully...');
   process.exit(0);

@@ -1,7 +1,7 @@
 import { supabase } from '../config/database.js';
 
 export class Favorite {
-  static async findByUserId(userId) {
+  static async findByUserId() {
     try {
       const { data, error } = await supabase
         .from('favorites')
@@ -12,7 +12,6 @@ export class Favorite {
             seller:sellers(*)
           )
         `)
-        .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -23,13 +22,11 @@ export class Favorite {
     }
   }
 
-  static async create(userId, productId) {
+  static async create(productId) {
     try {
-      // Check if favorite already exists
       const { data: existing } = await supabase
         .from('favorites')
         .select('id')
-        .eq('user_id', userId)
         .eq('product_id', productId)
         .single();
 
@@ -40,7 +37,6 @@ export class Favorite {
       const { data, error } = await supabase
         .from('favorites')
         .insert([{
-          user_id: userId,
           product_id: productId
         }])
         .select(`
@@ -60,12 +56,11 @@ export class Favorite {
     }
   }
 
-  static async delete(userId, productId) {
+  static async delete(productId) {
     try {
       const { error } = await supabase
         .from('favorites')
         .delete()
-        .eq('user_id', userId)
         .eq('product_id', productId);
 
       if (error) throw error;
@@ -76,12 +71,11 @@ export class Favorite {
     }
   }
 
-  static async isFavorite(userId, productId) {
+  static async isFavorite(productId) {
     try {
       const { data, error } = await supabase
         .from('favorites')
         .select('id')
-        .eq('user_id', userId)
         .eq('product_id', productId)
         .single();
 
