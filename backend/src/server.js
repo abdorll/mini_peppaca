@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://your-frontend-domain.com']
+    ? ['https://mini-peppaca.com'] // TODO: Will change to the actual frontend domain
     : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
@@ -78,7 +78,7 @@ const createApolloServer = async () => {
       path: '/graphql',
       cors: {
         origin: process.env.NODE_ENV === 'production'
-          ? ['https://your-frontend-domain.com']
+          ? ['https://mini-peppaca.com'] // TODO: Will change to the actual frontend domain
           : ['http://localhost:3000', 'http://localhost:5173'],
         credentials: true
       }

@@ -149,7 +149,7 @@ async function seedDatabase() {
     console.log('\n📊 Summary:');
     console.log(`- Sellers: ${sellersData.length}`);
     console.log(`- Products: ${productsData.length}`);
-    
+
   } catch (error) {
     console.error('❌ Error seeding database:', error);
     process.exit(1);

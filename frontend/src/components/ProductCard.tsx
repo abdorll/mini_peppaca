@@ -38,6 +38,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClic
     }
   };
 
+  // Debug logging to see what data we're receiving
+  // console.log('ProductCard - Seller data:', {
+  //   name: product.seller.name,
+  //   profilePicture: product.seller.profilePicture,
+  //   seller: product.seller
+  // });
+
   return (
     <div
       className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer border border-gray-100 overflow-hidden group"
@@ -73,16 +80,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClic
         <div className="text-2xl font-bold text-gray-900">${product.price}</div>
 
         <div className="flex items-center space-x-3 pt-2 border-t border-gray-100">
-          <img
-            src={product.seller.profilePicture || 'https://via.placeholder.com/32x32?text=?'}
-            alt={product.seller.name}
-            className="w-8 h-8 rounded-full object-cover"
-            onError={(e) => {
-              console.log('❌ Profile picture failed to load for seller:', product.seller.name);
-              console.log('Profile picture URL:', product.seller.profilePicture);
-              e.currentTarget.src = 'https://via.placeholder.com/32x32?text=?';
-            }}
-          />
+          {product.seller.profilePicture ? (
+            <img
+              src={product.seller.profilePicture}
+              alt={product.seller.name}
+              className="w-8 h-8 rounded-full object-cover bg-gray-100"
+              onError={(e) => {
+                // console.log('❌ Profile picture failed to load for seller:', product.seller.name);
+                // console.log('Profile picture URL:', product.seller.profilePicture);
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          <div className={`w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold ${product.seller.profilePicture ? 'hidden' : ''}`}>
+            {product.seller.name.charAt(0).toUpperCase()}
+          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-1">
               <User className="h-3 w-3 text-gray-400" />

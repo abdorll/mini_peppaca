@@ -24,7 +24,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const isProductFavorite = isFavorite(product.id);
 
   const handleFavoriteClick = async () => {
-    if (isLoading) return;
+    if (isLoading) return; // Prevent multiple clicks
 
     setIsLoading(true);
 
@@ -47,6 +47,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+        {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900">Product Details</h2>
           <button
@@ -57,8 +58,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
         </div>
 
+        {/* Content */}
         <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+            {/* Product Image */}
             <div className="space-y-4">
               <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
                 <img
@@ -69,6 +72,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
             </div>
 
+            {/* Product Information */}
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.title}</h1>
@@ -80,22 +84,29 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <p className="text-gray-700 leading-relaxed">{product.fullDescription}</p>
               </div>
 
+              {/* Seller Information */}
               <div className="bg-gray-50 rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                   <User className="h-5 w-5 mr-2" />
                   Seller Information
                 </h3>
                 <div className="flex items-start space-x-4">
-                  <img
-                    src={product.seller.profilePicture || 'https://via.placeholder.com/64x64?text=?'}
-                    alt={product.seller.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                    onError={(e) => {
-                      console.log('❌ Profile picture failed to load for seller:', product.seller.name);
-                      console.log('Profile picture URL:', product.seller.profilePicture);
-                      e.currentTarget.src = 'https://via.placeholder.com/64x64?text=?';
-                    }}
-                  />
+                  {product.seller.profilePicture ? (
+                    <img
+                      src={product.seller.profilePicture}
+                      alt={product.seller.name}
+                      className="w-16 h-16 rounded-full object-cover bg-gray-100"
+                      onError={(e) => {
+                        console.log('❌ Profile picture failed to load for seller:', product.seller.name);
+                        console.log('Profile picture URL:', product.seller.profilePicture);
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-lg font-semibold ${product.seller.profilePicture ? 'hidden' : ''}`}>
+                    {product.seller.name.charAt(0).toUpperCase()}
+                  </div>
                   <div className="flex-1 space-y-2">
                     <h4 className="font-semibold text-gray-900">{product.seller.name}</h4>
                     <div className="flex items-center space-x-2 text-gray-600">
@@ -110,6 +121,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               </div>
 
+              {/* Action Buttons */}
               <div className="flex space-x-4">
                 <button
                   onClick={handleFavoriteClick}

@@ -192,7 +192,12 @@ export const resolvers = {
 
   Seller: {
     profilePicture: (parent) => {
-      return parent.profile_picture || parent.profilePicture || null;
+      console.log('🔍 Seller resolver - parent data:', parent);
+      console.log('🔍 Seller resolver - profile_picture:', parent.profile_picture);
+      console.log('🔍 Seller resolver - profilePicture:', parent.profilePicture);
+      const result = parent.profile_picture || parent.profilePicture || null;
+      console.log('🔍 Seller resolver - final result:', result);
+      return result;
     },
     createdAt: (parent) => {
       return parent.created_at || parent.createdAt;

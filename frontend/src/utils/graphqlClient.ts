@@ -56,4 +56,4 @@ export class GraphQLClient {
     static async mutation<T = any>(mutation: string, variables?: Record<string, any>): Promise<T> {
         return this.query<T>(mutation, variables);
     }
-} 
+}
