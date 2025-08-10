@@ -132,6 +132,20 @@ Before running this application, ensure you have:
    - Backend API: [http://localhost:3001](http://localhost:3001)
    - GraphQL Playground: [http://localhost:3001/graphql](http://localhost:3001/graphql)
 
+## 🌐 Live Production Deployment
+
+The application is now live and fully deployed:
+
+**🔗 Frontend (Netlify)**: [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app)
+
+**🔗 Backend API (Render)**: [https://api-mini-peppaca.onrender.com/api](https://api-mini-peppaca.onrender.com/api)
+
+**🔗 GraphQL Endpoint**: [https://api-mini-peppaca.onrender.com/graphql](https://api-mini-peppaca.onrender.com/graphql)
+
+**🔗 Health Check**: [https://api-mini-peppaca.onrender.com/health](https://api-mini-peppaca.onrender.com/health)
+
+The production environment is fully functional and ready for use!
+
 ## 🔌 API Architecture
 
 ### REST API (Products)
@@ -242,10 +256,14 @@ npm run preview      # Preview production build
 2. Deploy to your preferred platform (Heroku, Railway, AWS, etc.)
 3. Update CORS origins for your frontend domain
 
+**✅ Currently Deployed on Render**: [https://api-mini-peppaca.onrender.com](https://api-mini-peppaca.onrender.com)
+
 ### Frontend Deployment
 1. Build the application: `npm run build`
 2. Deploy to Vercel, Netlify, or your preferred platform
 3. Update environment variables for production API endpoints
+
+**✅ Currently Deployed on Netlify**: [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app)
 
 ### Environment Variables
 
@@ -259,9 +277,17 @@ NODE_ENV=production
 ```
 
 **Frontend (.env)**
+
+**For Local Development:**
 ```env
-VITE_API_URL=https://your-backend-domain.com/api
-VITE_GRAPHQL_URL=https://your-backend-domain.com/graphql
+VITE_API_URL=http://localhost:3001/api
+VITE_GRAPHQL_URL=http://localhost:3001/graphql
+```
+
+**For Production (mini-peppaca.netlify.app):**
+```env
+VITE_API_URL=https://api-mini-peppaca.onrender.com/api
+VITE_GRAPHQL_URL=https://api-mini-peppaca.onrender.com/graphql
 ```
 
 ## 🛡️ Security & Performance
@@ -337,9 +363,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for the utility-first CSS framework
 - **Vite Team** for the fast build tool
 
-## 🎯 Roadmap
+## 🎯 Current Status & Roadmap
 
-### Planned Features
+### ✅ **LIVE & DEPLOYED**
+The Mini Peppaca platform is now **fully live and operational** with:
+- **Production Frontend**: [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app)
+- **Production Backend**: [https://api-mini-peppaca.onrender.com](https://api-mini-peppaca.onrender.com)
+- **Full E-commerce Functionality**: Product browsing, search, favorites, and responsive design
+
+### 🚀 Planned Features
 - **User Authentication**: JWT-based authentication system
 - **Shopping Cart**: Add to cart functionality
 - **Order Management**: Complete order processing

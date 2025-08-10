@@ -139,6 +139,18 @@ Before running this application, ensure you have:
 7. **Verify the server is running**
    Navigate to [http://localhost:3001/health](http://localhost:3001/health)
 
+## 🌐 Live Deployment
+
+The backend API is now live and deployed on **Render**:
+
+**🔗 Production Base URL**: `https://api-mini-peppaca.onrender.com/api`
+
+**🔗 Production GraphQL Endpoint**: `https://api-mini-peppaca.onrender.com/graphql`
+
+**🔗 Health Check**: [https://api-mini-peppaca.onrender.com/health](https://api-mini-peppaca.onrender.com/health)
+
+The production API is fully functional and serves the live frontend at [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app).
+
 ## 🗄️ Database Schema
 
 ### Tables Structure
@@ -405,6 +417,7 @@ npm run format
 
 ### Deployment Platforms
 
+- **Render** ✅ **Currently Deployed** - Production backend running at [https://api-mini-peppaca.onrender.com](https://api-mini-peppaca.onrender.com)
 - **Heroku**: Easy deployment with Git integration
 - **Railway**: Modern deployment platform
 - **DigitalOcean App Platform**: Scalable container deployment
@@ -446,23 +459,39 @@ GET /test-graphql
 The backend is designed to work seamlessly with the Mini Peppaca frontend:
 
 ### Frontend Configuration
-Update your frontend environment variables:
+
+**For Local Development:**
 ```env
 VITE_API_URL=http://localhost:3001/api
 VITE_GRAPHQL_URL=http://localhost:3001/graphql
+```
+
+**For Production (Frontend at mini-peppaca.netlify.app):**
+```env
+VITE_API_URL=https://api-mini-peppaca.onrender.com/api
+VITE_GRAPHQL_URL=https://api-mini-peppaca.onrender.com/graphql
 ```
 
 ### API Integration Examples
 
 **REST API (Products)**
 ```javascript
+// Local development
 const response = await fetch('http://localhost:3001/api/products');
+
+// Production
+const response = await fetch('https://api-mini-peppaca.onrender.com/api/products');
+
 const products = await response.json();
 ```
 
 **GraphQL (Favorites)**
 ```javascript
+// Local development
 const response = await fetch('http://localhost:3001/graphql', {
+
+// Production
+const response = await fetch('https://api-mini-peppaca.onrender.com/graphql', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
