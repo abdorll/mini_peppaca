@@ -15,12 +15,54 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://mini-peppaca.com'] // TODO: Will change to the actual frontend domain
-    : ['http://localhost:3000', 'http://localhost:5173'],
-  credentials: true
-}));
+// CORS Configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      console.log('🔍 CORS: No origin provided, allowing request');
+      return callback(null, true);
+    }
+
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:4173',
+      'https://mini-peppaca.com',
+      'https://mini-peppaca.vercel.app',
+      'https://mini-peppaca.netlify.app',
+      // Add your actual frontend domain here
+    ];
+
+    console.log('🔍 CORS Check - Origin:', origin);
+    console.log('🔍 CORS Check - Allowed Origins:', allowedOrigins);
+
+    // For development, allow all localhost origins
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      console.log('✅ CORS: Localhost origin allowed');
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log('✅ CORS: Origin allowed');
+      callback(null, true);
+    } else {
+      console.log('❌ CORS: Origin not allowed:', origin);
+      console.log('💡 Add this origin to the allowedOrigins array:', origin);
+      console.log('💡 Your backend domain is: https://api-mini-peppaca.onrender.com');
+      console.log('💡 This should be your frontend domain, not your backend domain');
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
+
+// Add CORS preflight handling
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -31,6 +73,21 @@ app.get('/health', (req, res) => {
     message: 'Mini Peppaca API is running!',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+app.get('/cors-test', (req, res) => {
+  console.log('🔍 CORS Test Request:');
+  console.log('   Origin:', req.headers.origin);
+  console.log('   Referer:', req.headers.referer);
+  console.log('   User-Agent:', req.headers['user-agent']);
+
+  res.json({
+    success: true,
+    message: 'CORS test successful!',
+    origin: req.headers.origin,
+    referer: req.headers.referer,
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -76,12 +133,7 @@ const createApolloServer = async () => {
     server.applyMiddleware({
       app,
       path: '/graphql',
-      cors: {
-        origin: process.env.NODE_ENV === 'production'
-          ? ['https://mini-peppaca.com'] // TODO: Will change to the actual frontend domain
-          : ['http://localhost:3000', 'http://localhost:5173'],
-        credentials: true
-      }
+      cors: corsOptions
     });
 
     console.log('✅ Apollo Server created and middleware applied successfully');
@@ -133,6 +185,8 @@ const startServer = async () => {
       console.log('\n📋 Available GraphQL Endpoints:');
       console.log(`   POST   /graphql`);
       console.log(`   GET    /graphql (Playground)`);
+      console.log('\n🔒 CORS Configuration:');
+      console.log('   Allowed Origins:', corsOptions.origin);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     });
 

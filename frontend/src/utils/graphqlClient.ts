@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const GRAPHQL_ENDPOINT = 'http://localhost:3001/graphql';
+const GRAPHQL_ENDPOINT = 'https://api-mini-peppaca.onrender.com/graphql';
 
 interface GraphQLResponse<T = any> {
     data?: T;
