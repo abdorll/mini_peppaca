@@ -292,6 +292,8 @@ npm run preview      # Preview production build
 
 **✅ Currently Deployed on Render**: [https://api-mini-peppaca.onrender.com](https://api-mini-peppaca.onrender.com)
 
+**✅ Currently Deployed on Render**: [https://api-mini-peppaca.onrender.com](https://api-mini-peppaca.onrender.com)
+
 ### Frontend Deployment
 1. Build the application: `npm run build`
 2. Deploy to Vercel, Netlify, or your preferred platform
@@ -319,7 +321,17 @@ VITE_GRAPHQL_URL=http://localhost:3001/graphql
 ```
 
 **For Production (mini-peppaca.netlify.app):**
+
+**For Local Development:**
 ```env
+VITE_API_URL=http://localhost:3001/api
+VITE_GRAPHQL_URL=http://localhost:3001/graphql
+```
+
+**For Production (mini-peppaca.netlify.app):**
+```env
+VITE_API_URL=https://api-mini-peppaca.onrender.com/api
+VITE_GRAPHQL_URL=https://api-mini-peppaca.onrender.com/graphql
 VITE_API_URL=https://api-mini-peppaca.onrender.com/api
 VITE_GRAPHQL_URL=https://api-mini-peppaca.onrender.com/graphql
 ```
@@ -397,6 +409,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for the utility-first CSS framework
 - **Vite Team** for the fast build tool
 
+## 🎯 Current Status & Roadmap
 ## 🎯 Current Status & Roadmap
 
 ### ✅ **LIVE & DEPLOYED**
