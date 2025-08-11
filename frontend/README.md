@@ -2,7 +2,7 @@
 
 A modern, responsive e-commerce frontend built with React, TypeScript, and GraphQL. This application provides a seamless shopping experience with real-time product browsing, favorites management, and intuitive user interface.
 
-![Mini Peppaca Frontend](https://img.shields.io/badge/React-18.2.0-blue?logo=react)
+![Mini Peppaca Frontend](https://img.shields.io/badge/React-18.2.0-blue?logo=react)|
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-4.4.0-purple?logo=vite)
 ![GraphQL](https://img.shields.io/badge/GraphQL-Query-blue?logo=graphql)
@@ -128,6 +128,10 @@ Before running this application, ensure you have:
    VITE_API_URL=http://localhost:3001
    VITE_GRAPHQL_URL=http://localhost:3001/graphql
    ```
+   
+   **Note**: For production, the app uses:
+   - **API Base URL**: `https://api-mini-peppaca.onrender.com/api`
+   - **GraphQL URL**: `https://api-mini-peppaca.onrender.com/graphql`
 
 4. **Start the development server**
    ```bash
@@ -138,6 +142,13 @@ Before running this application, ensure you have:
 
 5. **Open your browser**
    Navigate to [http://localhost:5173](http://localhost:5173)
+
+## 🌐 Live Version
+
+The live version of this frontend application is available at:
+**🔗 [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app)**
+
+This production version connects to the live backend API at `https://api-mini-peppaca.onrender.com/api`.
 
 ## 🔧 Development
 
@@ -258,9 +269,14 @@ The frontend uses GraphQL for favorites management:
 Set these environment variables in production:
 
 ```env
-VITE_API_URL=https://your-backend-domain.com
-VITE_GRAPHQL_URL=https://your-backend-domain.com/graphql
+VITE_API_URL=https://api-mini-peppaca.onrender.com/api
+VITE_GRAPHQL_URL=https://api-mini-peppaca.onrender.com/graphql
 ```
+
+**Current Production URLs:**
+- **Frontend**: [mini-peppaca.netlify.app](https://mini-peppaca.netlify.app)
+- **Backend API**: [https://api-mini-peppaca.onrender.com/api](https://api-mini-peppaca.onrender.com/api)
+- **GraphQL Endpoint**: [https://api-mini-peppaca.onrender.com/graphql](https://api-mini-peppaca.onrender.com/graphql)
 
 ## 🤝 Contributing
 

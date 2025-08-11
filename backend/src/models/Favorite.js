@@ -1,7 +1,7 @@
 import { supabase } from '../config/database.js';
 
 export class Favorite {
-  static async findByUserId() {
+  static async findFavourites() {
     try {
       const { data, error } = await supabase
         .from('favorites')

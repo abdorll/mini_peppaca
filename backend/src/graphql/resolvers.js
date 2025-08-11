@@ -55,7 +55,7 @@ export const resolvers = {
     favorites: async () => {
       try {
         console.log('🔄 GraphQL: Fetching favorites');
-        const favorites = await Favorite.findByUserId();
+        const favorites = await Favorite.findFavourites();
         console.log('✅ GraphQL: Favorites fetched successfully:', favorites.length);
         return favorites;
       } catch (error) {

@@ -155,4 +155,4 @@ export const checkIsFavoriteGraphQL = async (productId: string): Promise<boolean
     console.error('❌ Error checking favorite status via GraphQL:', error);
     return false;
   }
-}; 
+};

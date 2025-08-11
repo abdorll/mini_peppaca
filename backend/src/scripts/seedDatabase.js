@@ -100,7 +100,7 @@ const generateProducts = (sellers) => [
     description: 'Bamboo desk organizer with multiple compartments',
     full_description: 'Organize your workspace with this elegant bamboo desk organizer. Featuring multiple compartments for pens, pencils, paperclips, and other office essentials. The sustainable bamboo construction is both durable and environmentally friendly. The minimalist design complements any office décor while maximizing desk space efficiency.',
     price: 29.99,
-    image: 'https://images.pexels.com/photos/159832/pencils-coloured-pencils-colour-pencils-colouring-pencils-159832.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+    image: 'https://aarfrvvtzvpptpisoryo.supabase.co/storage/v1/object/public/some-product-pic/minimalisticdesk.jpg',
     seller_id: sellers[2].id
   },
   {

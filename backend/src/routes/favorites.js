@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const favorites = await Favorite.findByUserId();
+    const favorites = await Favorite.findFavourites();
 
     res.json({
       success: true,
